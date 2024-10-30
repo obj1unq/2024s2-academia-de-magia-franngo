@@ -9,7 +9,7 @@ describe "Academia de Magia" {
 	 */
 
 	const baul = new Baul(volumenMax=5) // TODO: construir/obtener un baúl con volumen máximo = 5 y la escoba dentro
-	const gabineteMagico = new GabineteMagico() // TODO: construir/obtener un gabinete mágico con la varita dentro. El precio = 6 (segunda parte)
+	const gabineteMagico = new GabineteMagico(precio = 0) // TODO: construir/obtener un gabinete mágico con la varita dentro. El precio = 6 (segunda parte)
 	const armario = new Armario(maxDeObjetos=2) // TODO: construir/obtener un armario con cantidad máxima = 2 y la pelota dentro
 	const academia = new Academia(muebles = #{baul, gabineteMagico, armario}) // TODO: construir/obtener una academia que tiene el baúl, el gabinete mágico y el armario
 	const pelota = new Cosa(volumen=3, marca=cuchuflito, esElementoMagico=false, esReliquia=false)
