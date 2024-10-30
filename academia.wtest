@@ -9,7 +9,7 @@ describe "Academia de Magia" {
 	 */
 
 	const baul = new Baul(volumenMax=5) // TODO: construir/obtener un baúl con volumen máximo = 5 y la escoba dentro
-	const gabineteMagico = new GabineteMagico(precio = 0) // TODO: construir/obtener un gabinete mágico con la varita dentro. El precio = 6 (segunda parte)
+	const gabineteMagico = new GabineteMagico(precio = 6) // TODO: construir/obtener un gabinete mágico con la varita dentro. El precio = 6 (segunda parte)
 	const armario = new Armario(maxDeObjetos=2) // TODO: construir/obtener un armario con cantidad máxima = 2 y la pelota dentro
 	const academia = new Academia(muebles = #{baul, gabineteMagico, armario}) // TODO: construir/obtener una academia que tiene el baúl, el gabinete mágico y el armario
 	const pelota = new Cosa(volumen=3, marca=cuchuflito, esElementoMagico=false, esReliquia=false)
@@ -74,6 +74,7 @@ describe "Academia de Magia" {
 		assert.notThat(academia.estaEnLaAcamedia(pava))
 	}
 /*
+//acá me está indicando que setee un estado inicial
  * 	test "punto 2.1 utilidad" {
  * 		// TODO: Guardar la pava en el armario
  * 		// TODO: Guardar la lámpara en el gabinete mágico
@@ -84,6 +85,17 @@ describe "Academia de Magia" {
  * 		// TODO: Verificar que la utilidad del baúl mágico es 5
  * 	}
  */
+	test "punto 2.1 utilidad" {
+		armario.guardarCosa(pava) //acá estoy seteando un estado inicial
+		gabineteMagico.guardarCosa(lamparaAladino) //acá estoy seteando un estado inicial
+		const baulMagico = new BaulMagico(volumenMax=12)
+		baulMagico.guardarCosa(escoba)
+		baulMagico.guardarCosa(lamparaAladino)
+		assert.equals(1.1, armario.utilidad())
+		assert.equals(3, gabineteMagico.utilidad())
+		assert.equals(4, baul.utilidad())
+		assert.equals(5, baulMagico.utilidad())
+	}
 /*
  * 	test "punto 2.2 cosas menos utiles" {
  * 		// TODO: Guardar la pava en el armario
@@ -91,6 +103,11 @@ describe "Academia de Magia" {
  * 		// TODO: Verificar que las cosas menos útiles en la academia son la pelota, la varita y la escoba
  * 	}
  */
+	test "punto 2.2 cosas menos utiles" {
+		armario.guardarCosa(pava) //acá estoy seteando un estado inicial
+		gabineteMagico.guardarCosa(lamparaAladino) //acá estoy seteando un estado inicial
+		assert.equals(#{pelota, varita, escoba}, academia.cosasMenosUtiles().asSet())
+	}
 /*
  * 	test "punto 2.3 marca de cosa menos util" {
  * 		// TODO: Guardar la pava en el armario
@@ -98,6 +115,11 @@ describe "Academia de Magia" {
  * 		// TODO: Verificar que la marca menos útil de la academia es cuchuflito
  * 	}
  */
+	test "punto 2.3 marca de cosa menos util" {
+		armario.guardarCosa(pava) //acá estoy seteando un estado inicial
+		gabineteMagico.guardarCosa(lamparaAladino) //acá estoy seteando un estado inicial
+		assert.equals(cuchuflito, academia.marcaMenosUtil())
+	}
 /*
  * 	test "punto 2.4 remover cosas menos utiles que no son magicas" {
  * 		// TODO: Guardar la pava en el armario
@@ -110,11 +132,25 @@ describe "Academia de Magia" {
  * 		// TODO: Verificar que la lámpara está guardada en la academia
  * 	}
  */
+	test "punto 2.4 remover cosas menos utiles que no son magicas" {
+		armario.guardarCosa(pava) //acá estoy seteando un estado inicial
+		gabineteMagico.guardarCosa(lamparaAladino) //acá estoy seteando un estado inicial
+		academia.removerNiUtilesNiMagicas()
+		assert.that(academia.estaEnLaAcamedia(varita))
+		assert.notThat(academia.estaEnLaAcamedia(pelota))
+		assert.that(academia.estaEnLaAcamedia(escoba))
+		assert.that(academia.estaEnLaAcamedia(pava))
+		assert.that(academia.estaEnLaAcamedia(lamparaAladino))
+	}
 /*
  * 	test "punto 2.4 imposible remover cosas menos utiles que no son magicas" {
  * 		// TODO: Hacer que la academia tenga solamente el armario y el baúl
  * 		// TODO: Remover las cosas menos útiles de la academia que no son mágicas (NO SE PUEDE!)
  * 	}
  */
+	test "punto 2.4.1 imposible remover cosas menos utiles que no son magicas" {
+		academia.muebles().remove(gabineteMagico) //capaz debería haber implementado un método para no tener que hacerlo de esta forma fea
+		assert.throwsException({academia.removerNiUtilesNiMagicas()})
+	}
 }
 

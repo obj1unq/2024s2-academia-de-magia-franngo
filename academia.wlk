@@ -35,8 +35,31 @@ class Academia {
 		return muebles.map({mueble => mueble.cosaMenosUtil()})
 	}
 
+	method cosaMenosUtil() {
+		const menosUtiles = self.cosasMenosUtiles()
+		return menosUtiles.min({cosa => cosa.utilidadQueAporta()})
+	}
+
 	method marcaMenosUtil() {
-		return self.cosasMenosUtiles().min({cosa => cosa.utilidadQueAporta()}).marca() //agarramos la MENOS ÚTIL y devolvemos la marca
+		return self.cosaMenosUtil().marca() //agarramos la MENOS ÚTIL y devolvemos la marca
+	}
+
+	method removerNiUtilesNiMagicas() {
+		self.validarCantMuebles()
+		const cosasARemover = self.cosasNiUtilesNiMagicas()
+		cosasARemover.forEach({cosa => self.enQueMuebleEstaGuardado(cosa).remover(cosa)}) //lo de adentro del foreach podría haberlo
+																						  //realizado en una subtarea de la academia!
+	}
+
+	method validarCantMuebles() {
+		if(muebles.size() < 3) {
+			self.error("La academia no tiene la cantidad de muebles suficiente para hacer eso")
+		}
+	}
+
+	method cosasNiUtilesNiMagicas() {
+		const menosUtiles = self.cosasMenosUtiles()
+		return menosUtiles.filter({cosa => !cosa.esElementoMagico()})
 	}
 
 }
@@ -77,6 +100,10 @@ class Mueble {
 		return cosasGuardadas.min({cosa => cosa.utilidadQueAporta()})
 	}
 
+	method remover(cosa) {
+		cosasGuardadas.remove(cosa)
+	}
+
 }
 
 class Baul inherits Mueble {
@@ -98,8 +125,12 @@ class Baul inherits Mueble {
 		return super() + self.dosSiSonTodasReliquias() 
 	}
 
+	method tieneTodasReliquias() {
+		return cosasGuardadas.all({cosa => cosa.esReliquia()})
+	}
+
 	method dosSiSonTodasReliquias() { //podría llamarse simplemente extra. Es muy de implementación ese nombre
-		return if ( cosasGuardadas.all({cosa => cosa.esReliquia()}) ) 2 else 0
+		return if (self.tieneTodasReliquias()) 2 else 0
 	}
 
 }
